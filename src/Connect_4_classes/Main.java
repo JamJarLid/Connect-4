@@ -239,6 +239,7 @@ public class Main {
         } catch (Exception ignore) {
         }
         //Winning play conditions
+        //Still overrides the previous best move with a new one if found, break the search after a winning move is found
         char player = currentPlayer.symbol;
         char opp = opponent.symbol;
         int play = (int) (Math.random() * (7));
@@ -263,6 +264,7 @@ public class Main {
                         board[row][col + 2] == player){
                     if(board[row][col + 3] == ' ') {
                         play = col + 3;
+                        break;
                     } else if ((col - 1) >= 0 && board[row][col - 1] == ' ') {
                         play = col - 1;
                         break;
@@ -317,6 +319,7 @@ public class Main {
                         board[row][col + 2] == opp){
                     if(board[row][col + 3] == ' ') {
                         play = col + 3;
+                        break;
                     } else if ((col - 1) >= 0 && board[row][col - 1] == ' ') {
                         play = col - 1;
                         break;
