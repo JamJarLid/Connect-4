@@ -60,30 +60,35 @@ public class Main {
     public static void botChecker(Player p, String pnr) {
         Scanner in = new Scanner(System.in);
         int type;
-        do {
-            System.out.println(pnr + ": What kind of player are you?\n" +
-                    "1. Human\n" +
-                    "2. Dumb Bot\n" +
-                    "3. Smart Bot");
-            type = in.nextInt();
+        try {
+            do {
+                System.out.println(pnr + ": What kind of player are you?\n" +
+                        "1. Human\n" +
+                        "2. Dumb Bot\n" +
+                        "3. Smart Bot");
+                    type = Integer.parseInt(in.nextLine());
 
-
-            switch (type) {
-                case 1 -> {
-                    p.isDumbBot = false;
-                    p.isSmartBot = false;
-                }
-                case 2 -> {
-                    p.isDumbBot = true;
-                    p.isSmartBot = false;
-                }
-                case 3 -> {
-                    p.isDumbBot = false;
-                    p.isSmartBot = true;
-                }
-                default -> System.out.println("Choose a valid option!");
+                    switch (type) {
+                        case 1 -> {
+                            p.isDumbBot = false;
+                            p.isSmartBot = false;
+                        }
+                        case 2 -> {
+                            p.isDumbBot = true;
+                            p.isSmartBot = false;
+                        }
+                        case 3 -> {
+                            p.isDumbBot = false;
+                            p.isSmartBot = true;
+                        }
+                        default -> System.out.println("Choose a valid option!");
+                    }
+                } while (type < 1 || type > 3);
+        }catch(Exception ignore){
+            System.out.println("Choose a valid option!");
+            botChecker(p, pnr);
             }
-        } while (type < 1 || type > 3);
+
     }
 
     // Move making method
@@ -204,21 +209,20 @@ public class Main {
         do {
             System.out.println("Play Again? (y/n)");
             yn = in.nextLine();
-            if (yn.equals("y")) {
-                emptyBoard();
-            } else if (yn.equals("n")) {
+            if (yn.equals("n")) {
+                loop = false;
+            } else if (yn.equals("y")) {
                 do {
-                    System.out.println("Play again with new players? (y/n)");
+                    System.out.println("Keep current players? (y/n)");
                     yn = in.nextLine();
-                    if (yn.equals("y")) {
+                    if (yn.equals("n")) {
                         makePlayer(currentPlayer, "Player 1");
                         makePlayer(opponent, "Player 2");
                         emptyBoard();
-                    } else if (yn.equals("n")) {
-                        loop = false;
+                    } else if (yn.equals("y")) {
+                        emptyBoard();
                     }
                 } while (!"yn".contains(yn));
-//               loop = false;
             }
         } while (!"yn".contains(yn));
     }
@@ -242,112 +246,60 @@ public class Main {
         //Still overrides the previous best move with a new one if found, break the search after a winning move is found
         char player = currentPlayer.symbol;
         char opp = opponent.symbol;
+        char[] players= {player, opp};
         int play = (int) (Math.random() * (7));
-        // Vertical 3
-        for (int row = board.length - 1; row >= board.length - 3; row--) {
-            for (int col = 0; col < board[0].length; col++) {
-                if (board[row][col] == player &&
-                        board[row - 1][col] == player &&
-                        board[row - 2][col] == player){
-                    if(board[row - 3][col] == ' '){
-                        play = col;
-                        break;
+        for (char playCheck: players) {
+            // Vertical 3
+            for (int row = board.length - 1; row >= board.length - 3; row--) {
+                for (int col = 0; col < board[0].length; col++) {
+                    if (board[row][col] == playCheck &&
+                            board[row - 1][col] == playCheck &&
+                            board[row - 2][col] == playCheck){
+                        if(board[row - 3][col] == ' '){
+                            play = col;
+                            return play;
+                        }
                     }
                 }
             }
-        }
-        //Horizontal 3
-        for (int row = board.length - 1; row >= 0; row--) {
-            for (int col = 0; col < board[0].length - 3; col++) {
-                if (board[row][col] == player &&
-                        board[row][col + 1] == player &&
-                        board[row][col + 2] == player){
-                    if(board[row][col + 3] == ' ') {
-                        play = col + 3;
-                        break;
-                    } else if ((col - 1) >= 0 && board[row][col - 1] == ' ') {
-                        play = col - 1;
-                        break;
+            //Horizontal 3
+            for (int row = board.length - 1; row >= 0; row--) {
+                for (int col = 0; col < board[0].length - 3; col++) {
+                    if (board[row][col] == playCheck &&
+                            board[row][col + 1] == playCheck &&
+                            board[row][col + 2] == playCheck){
+                        if(board[row][col + 3] == ' ') {
+                            play = col + 3;
+                            break;
+                        } else if ((col - 1) >= 0 && board[row][col - 1] == ' ') {
+                            play = col - 1;
+                            return play;
+                        }
                     }
                 }
             }
-        }
-        //Diagonal 3
-        for (int row = (board.length - 1); row >= board.length - 3; row--) {
-            for (int col = board[0].length - 1; col >= board[0].length - 4; col--) {
-                if (board[row][col] == player &&
-                        board[row - 1][col - 1] == player &&
-                        board[row - 2][col - 2] == player){
-                    if(board[row - 3][col - 3] == ' ') {
-                        play = col - 3;
-                        break;
+            //Diagonal 3
+            for (int row = (board.length - 1); row >= board.length - 3; row--) {
+                for (int col = board[0].length - 1; col >= board[0].length - 4; col--) {
+                    if (board[row][col] == playCheck &&
+                            board[row - 1][col - 1] == playCheck &&
+                            board[row - 2][col - 2] == playCheck) {
+                        if (board[row - 3][col - 3] == ' ') {
+                            play = col - 3;
+                            return play;
+                        }
                     }
                 }
             }
-        }
-        for (int row = board.length - 1; row >= 3 ; row--) {
-            for (int col = 0; col < board[0].length - 3; col++) {
-                if (board[row][col] == player &&
-                        board[row - 1][col + 1] == player &&
-                        board[row - 2][col + 2] == player){
-                    if(board[row - 3][col + 3] == ' '){
-                        play = col + 3;
-                        break;
-                    }
-                }
-            }
-        }
-        //Loss prevention conditions
-        // Vertical 3
-        for (int row = board.length - 1; row >= board.length - 3; row--) {
-            for (int col = 0; col < board[0].length; col++) {
-                if (board[row][col] == opp &&
-                        board[row - 1][col] == opp &&
-                        board[row - 2][col] == opp){
-                    if(board[row - 3][col] == ' '){
-                        play = col;
-                        break;
-                    }
-                }
-            }
-        }
-        //Horizontal 3
-        for (int row = board.length - 1; row >= 0; row--) {
-            for (int col = 0; col < board[0].length - 3; col++) {
-                if (board[row][col] == opp &&
-                        board[row][col + 1] == opp &&
-                        board[row][col + 2] == opp){
-                    if(board[row][col + 3] == ' ') {
-                        play = col + 3;
-                        break;
-                    } else if ((col - 1) >= 0 && board[row][col - 1] == ' ') {
-                        play = col - 1;
-                        break;
-                    }
-                }
-            }
-        }
-        //Diagonal 3
-        for (int row = (board.length - 1); row >= board.length - 3; row--) {
-            for (int col = board[0].length - 1; col >= board[0].length - 4; col--) {
-                if (board[row][col] == opp &&
-                        board[row - 1][col - 1] == opp &&
-                        board[row - 2][col - 2] == opp){
-                    if(board[row - 3][col - 3] == ' ') {
-                        play = col - 3;
-                        break;
-                    }
-                }
-            }
-        }
-        for (int row = board.length - 1; row >= 3 ; row--) {
-            for (int col = 0; col < board[0].length - 3; col++) {
-                if (board[row][col] == opp &&
-                        board[row - 1][col + 1] == opp &&
-                        board[row - 2][col + 2] == opp){
-                    if(board[row - 3][col + 3] == ' '){
-                        play = col + 3;
-                        break;
+            for (int row = board.length - 1; row >= 3 ; row--) {
+                for (int col = 0; col < board[0].length - 3; col++) {
+                    if (board[row][col] == playCheck &&
+                            board[row - 1][col + 1] == playCheck &&
+                            board[row - 2][col + 2] == playCheck){
+                        if(board[row - 3][col + 3] == ' '){
+                            play = col + 3;
+                            return play;
+                        }
                     }
                 }
             }
