@@ -243,7 +243,6 @@ public class Main {
         } catch (Exception ignore) {
         }
         //Winning play conditions
-        //Still overrides the previous best move with a new one if found, break the search after a winning move is found
         char player = currentPlayer.symbol;
         char opp = opponent.symbol;
         char[] players= {player, opp};
