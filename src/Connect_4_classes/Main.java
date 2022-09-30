@@ -246,7 +246,7 @@ public class Main {
         }
         catch (Exception ignore){
         }
-        return (int) (Math.random() * (7));
+        return (int) (Math.random() * (6));
     }
 
     public static int smartBotMove() {

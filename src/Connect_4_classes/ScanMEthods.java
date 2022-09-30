@@ -43,7 +43,7 @@ public class ScanMEthods {
     public static int[] scanDiagonal1(char playCheck, int streak){
 
         for (int row = (board.length - 1); row >= board.length - 3; row--) {
-            for (int col = board[0].length - 1; col >= board[0].length - 4; col--) {
+            for (int col = board[0].length - 1; col >= board[0].length - 3; col--) {
                 boolean streaks = true;
                 for (int i = 0; i < streak; i++){
                     streaks = board[row - i][col - i] == playCheck;
