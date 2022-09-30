@@ -139,7 +139,19 @@ public class Main {
 
     //  Win determining method
     public static boolean isaWin() {
-        //has the current player won?
+        char player = currentPlayer.symbol;
+        if(ScanMEthods.scanVertical(player,4)[0] != -1){
+            return true;
+        } else if (ScanMEthods.scanHorizontal(player, 4)[0] != -1) {
+            return true;
+        } else if (ScanMEthods.scanDiagonal1(player,4)[0] != -1) {
+            return true;
+        } else if (ScanMEthods.scanDiagonal2(player, 4)[0] != -1) {
+            return true;
+        } else {
+            return false;
+        }
+/*        //has the current player won?
         char player = currentPlayer.symbol;
         // Vertical wins
         for (int row = 0; row < board.length - 3; row++) {
@@ -184,7 +196,7 @@ public class Main {
                 }
             }
         }
-        return false;
+        return false;*/
     }
 
     //  Tie determining method
@@ -247,9 +259,39 @@ public class Main {
         char opp = opponent.symbol;
         char[] players= {player, opp};
         int play = (int) (Math.random() * (7));
-        for (char playCheck: players) {
-            // Vertical 3
-            for (int row = board.length - 1; row >= board.length - 3; row--) {
+        for (int i = 3; i > 1; i--){
+            for (char playCheck: players) {
+                if (ScanMEthods.scanVertical(playCheck, i)[0] != -1){
+                    if(board[ScanMEthods.scanVertical(playCheck, i)[0] - i][ScanMEthods.scanVertical(playCheck, i)[1]] == ' '){
+                        play = ScanMEthods.scanVertical(playCheck, i)[1];
+                        return play;
+                    }
+                } else if (ScanMEthods.scanHorizontal(playCheck, i)[0] != -1) {
+                    if(board[ScanMEthods.scanHorizontal(playCheck, i)[0]][ScanMEthods.scanHorizontal(playCheck, i)[1] + i] == ' ') {
+                        play = ScanMEthods.scanHorizontal(playCheck, i)[1] + i;
+                        return play;
+                    } else if (ScanMEthods.scanHorizontal(playCheck, i)[1] - 1 >= 0 &&
+                            board[ScanMEthods.scanHorizontal(playCheck, i)[0]][ScanMEthods.scanHorizontal(playCheck, i)[1] -1] == ' ') {
+                        play = ScanMEthods.scanHorizontal(playCheck, i)[1] - 1;
+                        return play;
+                    }
+                } else if (ScanMEthods.scanDiagonal1(playCheck, i)[0] != -1) {
+                    if(board[ScanMEthods.scanDiagonal1(playCheck, i)[0] - i][ScanMEthods.scanDiagonal1(playCheck, i)[1] - i] == ' ') {
+                        play = ScanMEthods.scanDiagonal1(playCheck, i)[0] - i;
+                        return play;
+                    }
+                } else if (ScanMEthods.scanDiagonal2(playCheck, i)[0] != -1) {
+                    if(board[ScanMEthods.scanDiagonal2(playCheck, i)[0] - i][ScanMEthods.scanDiagonal2(playCheck, i)[1] + i] == ' ') {
+                        play = ScanMEthods.scanDiagonal2(playCheck, i)[0] + i;
+                        return play;
+                    }
+                }
+            }
+        }
+        return play;
+    }
+}
+            /*for (int row = board.length - 1; row >= board.length - 3; row--) {
                 for (int col = 0; col < board[0].length; col++) {
                     if (board[row][col] == playCheck &&
                             board[row - 1][col] == playCheck &&
@@ -301,8 +343,5 @@ public class Main {
                         }
                     }
                 }
-            }
-        }
-        return play;
-    }
-}
+           }*/
+
