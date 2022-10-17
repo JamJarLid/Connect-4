@@ -94,18 +94,24 @@ public class Main {
     // Move making method
     public static void makeMove() {
         int col;
-        do {
+ //       do {
             renderBoard();
             // Choosing a valid column
             if (currentPlayer.isDumbBot) {
-                col = dumbBotMove();
+                do {
+                    col = dumbBotMove();
+                }while (board[0][col] != ' ');
             } else if (currentPlayer.isSmartBot) {
-                col = smartBotMove();
+                do{
+                    col = smartBotMove();
+                }while (board[0][col] != ' ');
             } else {
-                col = Input.integer("\nChoose a column: ", 1, 7) - 1;
+                do {
+                    col = Input.integer("\nChoose a column: ", 1, 7) - 1;
+                }while (board[0][col] != ' ');
             }
             // Is column full?
-        } while (board[0][col] != ' ');
+//        } while (board[0][col] != ' ');
         for (int row = board.length - 1; row >= 0; row--) {
             if (board[row][col] == ' ') {
                 board[row][col] = currentPlayer.symbol;
@@ -262,27 +268,32 @@ public class Main {
         for (int i = 3; i > 1; i--){
             for (char playCheck: players) {
                 if (ScanMEthods.scanVertical(playCheck, i)[0] != -1){
-                    if(board[ScanMEthods.scanVertical(playCheck, i)[0] - i][ScanMEthods.scanVertical(playCheck, i)[1]] == ' '){
+                    if(board[0][ScanMEthods.scanDiagonal1(playCheck, i)[1]] == ' ' &&
+                             board[ScanMEthods.scanVertical(playCheck, i)[0] - i][ScanMEthods.scanVertical(playCheck, i)[1]] == ' '){
                         play = ScanMEthods.scanVertical(playCheck, i)[1];
                         return play;
                     }
                 } else if (ScanMEthods.scanHorizontal(playCheck, i)[0] != -1) {
-                    if(board[ScanMEthods.scanHorizontal(playCheck, i)[0]][ScanMEthods.scanHorizontal(playCheck, i)[1] + i] == ' ') {
+                    if(board[0][ScanMEthods.scanDiagonal1(playCheck, i)[1] + i] == ' ' &&
+                            board[ScanMEthods.scanHorizontal(playCheck, i)[0]][ScanMEthods.scanHorizontal(playCheck, i)[1] + i] == ' ') {
                         play = ScanMEthods.scanHorizontal(playCheck, i)[1] + i;
                         return play;
-                    } else if (ScanMEthods.scanHorizontal(playCheck, i)[1] - 1 >= 0 &&
+                    } else if (board[0][ScanMEthods.scanDiagonal1(playCheck, i)[1] - 1] == ' ' &&
+                            ScanMEthods.scanHorizontal(playCheck, i)[1] - 1 >= 0 &&
                             board[ScanMEthods.scanHorizontal(playCheck, i)[0]][ScanMEthods.scanHorizontal(playCheck, i)[1] -1] == ' ') {
                         play = ScanMEthods.scanHorizontal(playCheck, i)[1] - 1;
                         return play;
                     }
                 } else if (ScanMEthods.scanDiagonal1(playCheck, i)[0] != -1) {
-                    if(board[ScanMEthods.scanDiagonal1(playCheck, i)[0] - i][ScanMEthods.scanDiagonal1(playCheck, i)[1] - i] == ' ') {
-                        play = ScanMEthods.scanDiagonal1(playCheck, i)[0] - i;
+                    if(board[0][ScanMEthods.scanDiagonal1(playCheck, i)[1] - i] == ' ' &&
+                            board[ScanMEthods.scanDiagonal1(playCheck, i)[0] - i][ScanMEthods.scanDiagonal1(playCheck, i)[1] - i] == ' ') {
+                        play = ScanMEthods.scanDiagonal1(playCheck, i)[1] - i;
                         return play;
                     }
                 } else if (ScanMEthods.scanDiagonal2(playCheck, i)[0] != -1) {
-                    if(board[ScanMEthods.scanDiagonal2(playCheck, i)[0] - i][ScanMEthods.scanDiagonal2(playCheck, i)[1] + i] == ' ') {
-                        play = ScanMEthods.scanDiagonal2(playCheck, i)[0] + i;
+                    if(board[0][ScanMEthods.scanDiagonal1(playCheck, i)[1] + i] == ' ' &&
+                            board[ScanMEthods.scanDiagonal2(playCheck, i)[0] - i][ScanMEthods.scanDiagonal2(playCheck, i)[1] + i] == ' ') {
+                        play = ScanMEthods.scanDiagonal2(playCheck, i)[1] + i;
                         return play;
                     }
                 }

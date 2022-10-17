@@ -5,7 +5,7 @@ import static Connect_4_classes.Main.board;
 public class ScanMEthods {
 
     public static int[] scanVertical(char playCheck, int streak){
-        for (int row = board.length - 1; row >= board.length - 3; row--) {
+        for (int row = board.length - 1; row >= board.length - 4; row--) {
             for (int col = 0; col < board[0].length; col++) {
                 boolean streaks = true;
                 for (int i = 0; i < streak; i++){
@@ -24,7 +24,7 @@ public class ScanMEthods {
 
     public static int[] scanHorizontal(char playCheck, int streak){
         for (int row = board.length - 1; row >= 0; row--) {
-            for (int col = 0; col < board[0].length - 3; col++) {
+            for (int col = 0; col < board[0].length - 4; col++) {
                 boolean streaks = true;
                 for (int i = 0; i < streak; i++){
                     streaks = board[row][col + i] == playCheck;
@@ -42,8 +42,8 @@ public class ScanMEthods {
 
     public static int[] scanDiagonal1(char playCheck, int streak){
 
-        for (int row = (board.length - 1); row >= board.length - 3; row--) {
-            for (int col = board[0].length - 1; col >= board[0].length - 3; col--) {
+        for (int row = (board.length - 1); row >= board.length - 4; row--) {
+            for (int col = board[0].length - 1; col >= board[0].length - 4; col--) {
                 boolean streaks = true;
                 for (int i = 0; i < streak; i++){
                     streaks = board[row - i][col - i] == playCheck;
@@ -61,7 +61,7 @@ public class ScanMEthods {
 
     public static int[] scanDiagonal2(char playCheck, int streak){
         for (int row = board.length - 1; row >= 3 ; row--) {
-            for (int col = 0; col < board[0].length - 3; col++) {
+            for (int col = 0; col < board[0].length - 4; col++) {
                 boolean streaks = true;
                 for (int i = 0; i < streak; i++){
                     streaks = board[row - i][col + i] == playCheck;
